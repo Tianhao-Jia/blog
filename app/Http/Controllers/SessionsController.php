@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class SessionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
     public function create()
     {
         return view('sessions.create');
@@ -21,7 +27,8 @@ class SessionsController extends Controller
 
        if (Auth::attempt($credentials, $request->has('remember'))) {
             session()->flash('success', 'Welcome back!');
-            return redirect()->route('users.show', [Auth::user()]);
+            $fallback = route('users.show', Auth::user());
+            return redirect()->intended($fallback);
         }else {
             session()->flash('danger', 'Sorry, the Email address or password is invalid');
             return redirect()->back()->withInput();
