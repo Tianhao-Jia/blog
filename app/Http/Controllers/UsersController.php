@@ -5,17 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+//allowed to send email
+use Illuminate\Support\Facades\Mail;
 class UsersController extends Controller
 {
     public function __construct()
     {
         //middleware auth, use with except which let only user login can see the page, but except the page qoute in 'except' session.
         $this->middleware('auth', [
-            'except' => ['show','create', 'store','index']
+            'except' => ['show','create', 'store','index','confirmEmail']
         ]);
         $this->middleware('guest', [
             'only' => ['create']
         ]);
+    }
+
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success', 'Congratulations, activation is successful!');
+        return redirect()->route('users.show', [$user]);
     }
 
     public function index()
@@ -47,9 +62,9 @@ class UsersController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        Auth::login($user);
-        session()->flash('success', 'Welcome to my blog platform');
-        return redirect()->route('users.show', [$user]);
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success', 'The verification email has been sent to your registered email address, please check it.');
+        return redirect('/');
     }
 
     public function edit(User $user)
@@ -86,6 +101,20 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success', 'User already delete');
         return back();
+    }
+
+    protected function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'jiatianhao0421@gmail.com';
+        $name = 'Tianhao';
+        $to = $user->email;
+        $subject = "Thanks for registering! Please confirm your email address.";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
     }
 
 
