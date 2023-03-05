@@ -51,4 +51,63 @@ class PasswordController extends Controller
         session()->flash('success', 'Reset email sent successful, please check you email box');
         return redirect()->back();
     }
+
+    public function showResetForm(Request $request)
+    {
+        //get the token from the database
+        $token = $request->route()->parameter('token');
+        return view('auth.passwords.reset', compact('token'));
+    }
+
+    public function reset(Request $request)
+    {
+        // Verify data compliance.
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+        ]);
+        $email = $request->email;
+        $token = $request->token;
+        // The validity time of retrieving the password link
+        $expires = 60 * 10;
+
+        // Obtain the user
+        $user = User::where("email", $email)->first();
+
+        // If user dose not exist
+        if (is_null($user)) {
+            session()->flash('danger', 'email not found');
+            return redirect()->back()->withInput();
+        }
+
+        // Read the reset record
+        $record = (array) DB::table('password_resets')->where('email', $email)->first();
+
+        // If has recode
+        if ($record) {
+            // Check the expires
+            if (Carbon::parse($record['created_at'])->addSeconds($expires)->isPast()) {
+                session()->flash('danger', 'The link has expired, please try again');
+                return redirect()->back();
+            }
+
+            // check if it correct
+            if ( ! Hash::check($token, $record['token'])) {
+                session()->flash('danger', 'Token wrong');
+                return redirect()->back();
+            }
+
+            // update
+            $user->update(['password' => bcrypt($request->password)]);
+
+            // give reminder
+            session()->flash('success', 'The password is reset successfully. Please use the new password to log in');
+            return redirect()->route('login');
+        }
+
+        // record not exist
+        session()->flash('danger', 'No reset record found');
+        return redirect()->back();
+    }
 }
