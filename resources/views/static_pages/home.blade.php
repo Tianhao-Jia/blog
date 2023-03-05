@@ -18,13 +18,13 @@
     <div class="bg-light p-3 p-sm-5 rounded">
       <h1>Hello Laravel</h1>
       <p class="lead">
-        你现在所看到的是 <a href="https://learnku.com/courses/laravel-essential-training">Laravel 入门教程</a> 的示例项目主页。
+        You can see <a href="https://learnku.com/courses/laravel-essential-training">Blog</a> Page。
       </p>
       <p>
-        一切，将从这里开始。
+        Everything start here
       </p>
       <p>
-        <a class="btn btn-lg btn-success" href="{{ route('signup') }}" role="button">现在注册</a>
+        <a class="btn btn-lg btn-success" href="{{ route('signup') }}" role="button">Register now</a>
       </p>
     </div>
   @endif
