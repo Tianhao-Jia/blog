@@ -11,15 +11,21 @@ nav.navbar.navbar-expand-lg {
   margin-bottom: 20px;
 }
 
+.myself{
+  margin-top: 100px;
+  width: 100%;
+}
+
+
+
 //footer
 footer {
-  margin-top: 55px;
+  margin-top: 100px;
   padding-top: 5px;
   border-top: 1px solid #eaeaea;
   color: #777;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: bold;
-
   a {
     color: #555;
   }
@@ -65,5 +71,8 @@ section.user_info {
     max-width: 100px;
   }
 }
+
+
+
 
 }

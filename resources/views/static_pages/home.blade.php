@@ -7,6 +7,9 @@
         <section class="status_form">
           @include('shared._status_form')
         </section>
+        <h4>Blog List</h4>
+        <hr>
+        @include('shared._feed')
       </div>
       <aside class="col-md-4">
         <section class="user_info">
@@ -15,10 +18,10 @@
       </aside>
     </div>
   @else
-    <div class="bg-light p-3 p-sm-5 rounded">
-      <h1>Hello Laravel</h1>
+    <div class="bg-light p-3 p-sm-5 rounded myself">
+      <h1>Hello, welcome to Myblog, Sign up to see other users' blog and create your own blog!</h1>
       <p class="lead">
-        You can see <a href="https://learnku.com/courses/laravel-essential-training">Blog</a> Page。
+        You can see <a href="https://learnku.com/courses/laravel-essential-training">My personal websit</a> by click this。
       </p>
       <p>
         Everything start here
