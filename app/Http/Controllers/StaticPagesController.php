@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Status;
 class StaticPagesController extends Controller
 {
     public function home(){
@@ -23,4 +24,6 @@ class StaticPagesController extends Controller
     public function help(){
         return view('static_pages/help');
     }
+
+
 }
