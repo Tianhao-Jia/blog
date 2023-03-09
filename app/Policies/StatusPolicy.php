@@ -14,4 +14,8 @@ class StatusPolicy
     {
         return $user->id === $status->user_id;
     }
+
+    public function update(User $user, Status $status){
+        return $user->id === $status->user_id;
+    }
 }
