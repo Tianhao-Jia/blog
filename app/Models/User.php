@@ -100,4 +100,9 @@ class User extends Authenticatable
     {
         return $this->followings->contains($user_id);
     }
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
 }
